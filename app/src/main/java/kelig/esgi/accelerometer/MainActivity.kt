@@ -22,10 +22,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         square = findViewById(R.id.moving_square)
 
-        setUpSensorStuff()
+        setUpSensor()
     }
 
-    private fun setUpSensorStuff() {
+    private fun setUpSensor() {
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also {
             sensorManager.registerListener(
@@ -37,25 +37,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
-    override fun onSensorChanged(event: SensorEvent?) {
-        if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
-            val sides = event.values[0]
-            val upDown = event.values[1]
-
-            square.apply {
-                rotationX = upDown * 3f
-                rotationY = sides * 3f
-                rotation = -sides
-                translationX = sides * -10
-                translationY = upDown * -10
-            }
-
-            val color = if (upDown.toInt() == 0 && sides.toInt() == 0) Color.GREEN else Color.RED
-            square.setBackgroundColor(color)
-
-            square.text = "up/down ${upDown.toInt()}\nleft/right ${sides.toInt()}"
-        }
-    }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         return
